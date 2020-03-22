@@ -34,9 +34,9 @@ class Bank:
         if amount < 0:
             print("[error] can't withdraw a negative amount")
             return False
-        if Bank.the_bank[who] < amount:
-            print("[error] withdrawal amount ${} is more than balance ${} for {}"
-                  .format(amount, Bank.the_bank[who], who))
-            return False
+        # if Bank.the_bank[who] < amount:
+        #     print("[error] withdrawal amount ${} is more than balance ${} for {}"
+        #           .format(amount, Bank.the_bank[who], who))
+        #     return False
         Bank.the_bank[who] -= amount
         return True

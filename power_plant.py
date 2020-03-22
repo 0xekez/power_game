@@ -24,9 +24,9 @@ class PowerPlant:
         # Charge the owner for the generation.
         cost = self.price_per_kwh * amount
         success = Bank().withdraw(self.owner, cost)
-        if not success:
-            print("[error] could not withdraw money for power generation")
-            return 0
+        #if not success:
+        #    print("[error] could not withdraw money for power generation")
+        #    return 0
 
         # Generate the power.
         self.remaining_power -= amount
