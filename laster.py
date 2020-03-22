@@ -14,3 +14,6 @@ class Laster(Player):
             my_bid.append(
                 [plant, max([self.last_clearing_price, plant.price_per_kwh])])
         return my_bid
+
+    def receive_update(self, update):
+        self.last_clearing_price = update
