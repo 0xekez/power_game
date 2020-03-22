@@ -1,19 +1,18 @@
 from player import Player
 from power_plant import PowerPlant
 
-class Bob(Player):
+# Tries to make a 25% profit on each sale.
+class Constant(Player):
     def __init__(self):
         # Initialize a player class with the name bob. This will
         # handle creating a bank account and getting all of our
         # variables in order.
-        super().__init__("bob")
-
-        # Add some power plants.
-        self.add_plant(PowerPlant(price=73.72, capacity=1900))
-        self.add_plant(PowerPlant(40.94, 650))
+        super().__init__("constant")
 
     def bid(self, demand):
         my_bid = []
         for plant in self.power_plants:
+            # Just try to sell our power at a rate that gives us a
+            # decent profit.
             my_bid.append([plant, plant.price_per_kwh * 1.25])
         return my_bid

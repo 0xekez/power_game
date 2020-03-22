@@ -37,3 +37,32 @@ class PowerPlant:
     # Called whenever a new game loop begins.
     def tick(self):
         self.remaining_power = self.capacity
+
+big_coal_plants = [
+    PowerPlant(price=36.5, capacity=1900),
+    PowerPlant(72.22, 250),
+    PowerPlant(40.5, 300),
+    PowerPlant(66.5, 150),
+    PowerPlant(41.94, 350),
+    PowerPlant(41.94, 950)
+]
+
+big_gass_plants = [
+    PowerPlant(44.83, 400),
+    PowerPlant(41.22, 650),
+    PowerPlant(52.5, 550),
+    PowerPlant(65.5, 150),
+    PowerPlant(41.67, 950),
+    PowerPlant(90.06, 200),
+    PowerPlant(43.83, 700)
+]
+
+bay_views_plants = [
+    PowerPlant(38.75, 335),
+    PowerPlant(36.61, 665),
+    PowerPlant(32.56, 750),
+    PowerPlant(32.56, 750),
+    PowerPlant(61.17, 150)
+]
+
+plant_groups = [big_coal_plants, big_gass_plants, bay_views_plants]
