@@ -8,8 +8,9 @@ from player import Player
 from laster import Laster
 from averager import Averager
 from constant import Constant
+from julia import Julia
 
-players = [Laster(), Averager(), Constant()]
+players = [Laster(), Averager(), Julia()]
 
 # Calculates what the clearing price will be for a given round. Takes
 # all of the bids for that round, and the demand for that round as
