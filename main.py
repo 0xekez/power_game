@@ -5,7 +5,6 @@ from player import Player
 from bob import Bob
 
 import random
-#Hugh was here
 
 def calculate_clearing_price(bids, demand):
     last_bid = 0
