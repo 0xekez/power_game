@@ -10,16 +10,21 @@ class Julia(Player):
         super().__init__("julia")
         self.past_clearing_prices = []
         self.past_ccps = []
+        self.past_demands = []
 
     def bid(self, demand):
         my_bid = []
         ccp = self.competative_clearing_price(demand)
+        #records ccp and demand for this hour
+        self.past_ccps += [ccp]
+        self.past_demands += [demand]
         for plant in self.power_plants:
             #bids competative clearing price for each of my plants
             my_bid.append([plant, ccp])
         return my_bid
 
     def receive_update(self, update):
+        #records clearing price for this hour
         self.past_clearing_prices += [update]
 
     def competative_clearing_price(self, demand):
