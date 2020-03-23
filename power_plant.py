@@ -65,7 +65,7 @@ bay_views_plants = [
     PowerPlant(61.17, 150)
 ]
 
-beachfront = [
+beachfront_plants = [
     PowerPlant(42.39, 650),
     PowerPlant(42.67, 850),
     PowerPlant(62.89, 150),
@@ -76,7 +76,7 @@ beachfront = [
     PowerPlant(38.06, 700)
 ]
 
-east_bay = [
+east_bay_plants = [
     PowerPlant(40.94, 650),
     PowerPlant(36.61, 650),
     PowerPlant(59.72, 700),
@@ -85,7 +85,7 @@ east_bay = [
     PowerPlant(69.83, 150),
 ]
 
-old_timers = [
+old_timers_plants = [
     PowerPlant(0, 1000),
     PowerPlant(34.5, 750),
     PowerPlant(34.5, 750),
@@ -93,7 +93,7 @@ old_timers = [
     PowerPlant(53.94, 100),
 ]
 
-fossil_light = [
+fossil_light_plants = [
     PowerPlant(47.44, 150),
     PowerPlant(.5, 800),
     PowerPlant(49.17, 150),
@@ -101,4 +101,4 @@ fossil_light = [
     PowerPlant(11.5, 1000),
 ]
 
-plant_groups = [big_coal_plants, big_gass_plants, bay_views_plants, beachfront, east_bay, old_timers, fossil_light]
+plant_groups = [big_coal_plants, big_gass_plants, bay_views_plants, beachfront_plants, east_bay_plants, old_timers_plants, fossil_light_plants]
