@@ -5,25 +5,28 @@ import matplotlib.pyplot as plt
 class Bank:
     # Shared across instances.
     the_bank = {}
-    records = {}
 
     def reset(self):
-        for name in Bank.the_bank:
-            Bank.the_bank[name] = 0
-            Bank.records[name] = []
+        Bank.the_bank = {}
     
     # Adds a player to the bank. Their default balance is zero.
     def create_account(self, name):
         if name in Bank.the_bank:
-            print("[error] an account with name {} already exists")
+            print("[error] an account with name {} already exists".format(name))
             return False
         Bank.the_bank[name] = 0
-        Bank.records[name] = [0]
         return True
 
     # Querys the bank to see if a given user has an account.
     def has_account(self, name):
         return name in Bank.the_bank
+
+    # Returns the balance of an account holder.
+    def check_balance(self, who):
+        if who not in Bank.the_bank:
+            print("[error] failed to check balance: no account for {}".format(who))
+            return 0
+        return Bank.the_bank[who]
 
     # Deposits _amount_ in the bank account for _who_.
     def deposit(self, who, amount):
@@ -34,7 +37,6 @@ class Bank:
             print("[error] can't deposit a negative amount")
             return False
         Bank.the_bank[who] += amount
-        Bank.records[who].append(Bank.the_bank[who])
         return True
 
     # Withdraws _amount_ in the bank account for _who_.
@@ -50,5 +52,4 @@ class Bank:
         #           .format(amount, Bank.the_bank[who], who))
         #     return False
         Bank.the_bank[who] -= amount
-        Bank.records[who].append(Bank.the_bank[who])
         return True

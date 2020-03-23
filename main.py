@@ -9,25 +9,22 @@ from laster import Laster
 from averager import Averager
 from constant import Constant
 from julia import Julia
+from zeke import Zeke
 
-players = [Laster(), Averager(), Julia()]
+players = [Constant(), Laster(), Averager(), Julia(), Zeke()]
 
-# Calculates what the clearing price will be for a given round. Takes
-# all of the bids for that round, and the demand for that round as
-# arguments.
+# Calculates the clearing price from a set of bids. Bids are in the
+# form (power_plant, bidded_price). Demand is the amount of power that
+# is need for this bid cycle.
 def calculate_clearing_price(bids, demand):
-    last_bid = 0
-    while demand > 0:
-        if len(bids) == 0:
-            return last_bid
-        current_bid = bids.pop(0)
-        current_plant = current_bid[0]
-        current_price = current_bid[1]
-        assert current_price >= last_bid, "bids are not sorted properly"
-        last_bid = current_price
-        power_wanted = min([current_plant.remaining_power, demand])
-        demand -= power_wanted
-    return last_bid
+    bids = sorted(bids, key=lambda bid: bid[1])
+    for bid in bids:
+        demand -= bid[0].remaining_power
+        if demand <= 0:
+            return bid[1]
+    # If there are not enough bids to satisfy demand, return the last
+    # bid.
+    return bids[-1][1]
 
 # Randomly assigns the power plants to the players in the game. No
 # real reason for this to be a function because it only modifies
@@ -43,7 +40,7 @@ def randomize_power_plants():
 
 days = 365
 rounds = days * 24
-repeats = 10
+repeats = 5
 
 # Set up win counts. A player 'wins' if at the end of a round they
 # have the most money in their bank account.
@@ -55,10 +52,12 @@ for player in players:
 clearing_prices = []
 
 for repeat in range(repeats):
+    # Reset the bank.
+    Bank().reset()
+    # Reset the players.
+    players = [p.__class__() for p in players]
     # Shuffle the power plants among the players.
     randomize_power_plants()
-    # Reset each players bank account.
-    Bank().reset()
 
     rounds_clearing_prices = []
     for i in range(rounds):
@@ -78,8 +77,7 @@ for repeat in range(repeats):
             bids.extend(players_bids)
 
         # Sort the bids by price.
-        bids = sorted(bids, key=lambda bid: bid[1])
-        clearing_price = calculate_clearing_price(bids.copy(), demand)
+        clearing_price = calculate_clearing_price(bids, demand)
         rounds_clearing_prices.append(clearing_price)
 
         while demand > 0:
