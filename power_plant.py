@@ -40,7 +40,7 @@ class PowerPlant:
 
 big_coal_plants = [
     PowerPlant(price=36.5, capacity=1900),
-    PowerPlant(72.22, 250),
+    PowerPlant(73.72, 250),
     PowerPlant(40.5, 300),
     PowerPlant(66.5, 150),
     PowerPlant(41.94, 350),
@@ -65,4 +65,40 @@ bay_views_plants = [
     PowerPlant(61.17, 150)
 ]
 
-plant_groups = [big_coal_plants, big_gass_plants, bay_views_plants]
+beachfront = [
+    PowerPlant(42.39, 650),
+    PowerPlant(42.67, 850),
+    PowerPlant(62.89, 150),
+    PowerPlant(75.61, 300),
+    PowerPlant(39.06, 300),
+    PowerPlant(52.06, 150),
+    PowerPlant(38.06, 700),
+    PowerPlant(38.06, 700)
+]
+
+east_bay = [
+    PowerPlant(40.94, 650),
+    PowerPlant(36.61, 650),
+    PowerPlant(59.72, 700),
+    PowerPlant(58.28, 150),
+    PowerPlant(39.5, 700),
+    PowerPlant(69.83, 150),
+]
+
+old_timers = [
+    PowerPlant(0, 1000),
+    PowerPlant(34.5, 750),
+    PowerPlant(34.5, 750),
+    PowerPlant(49.61, 150),
+    PowerPlant(53.94, 100),
+]
+
+fossil_light = [
+    PowerPlant(47.44, 150),
+    PowerPlant(.5, 800),
+    PowerPlant(49.17, 150),
+    PowerPlant(75.89, 250),
+    PowerPlant(11.5, 1000),
+]
+
+plant_groups = [big_coal_plants, big_gass_plants, bay_views_plants, beachfront, east_bay, old_timers, fossil_light]
