@@ -37,10 +37,10 @@ class Julia(Player):
                     lowest_bid, lowest_bidding_index = plant.price_per_kwh, i
             lowest_bidder = all_plants[lowest_bidding_index]
             if lowest_bidder.capacity <= demand_left:
-                ccp += lowest_bid*lowest_bidder.capacity
+                ccp = lowest_bid
                 demand_left -= lowest_bidder.capacity
                 all_plants = all_plants[:lowest_bidding_index]+all_plants[lowest_bidding_index+1:]
             else:
-                ccp += lowest_bid*demand_left
+                ccp = lowest_bid
                 demand_left = 0
         return ccp
