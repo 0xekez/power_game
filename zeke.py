@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+
 from player import Player
 from bank import Bank
 from power_plant import plant_groups
@@ -17,13 +18,6 @@ class Zeke(Player):
         # Compute the total amount of power avaliable on the market.
         self.supply = sum([
             sum([plant.capacity for plant in group]) for group in plant_groups])
-
-    def reset(self):
-        self.last_balance = 0
-        self.balance_deltas = []
-        self.balances = []
-
-        self.cost_modifier = 0.1
 
     def plot(self):
         plt.figure()
