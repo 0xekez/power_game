@@ -63,7 +63,7 @@ class Julia(Competative):
         ccp = self.competative_clearing_price(demand)
         predicted_cp = ccp
         if self.past_agressions:
-            predicted_cp = ccp * avg(self.past_agressions)
+            predicted_cp = self.predict_clearing_price(ccp)
         sorted_plants = sorted(self.power_plants, key=lambda plant: plant.price_per_kwh)
         intramarginal_plants, extramarginal_plants = [], []
         for plant in sorted_plants:
@@ -74,11 +74,11 @@ class Julia(Competative):
         if len(intramarginal_plants)>2:
             #if we have enough intramarginal plants to have some stability
             #then we price one a little higher than predicted cp.
-            for plant in intramarginal_plants[-1]:
-                my_bid.append(plant, plant.price_per_kwh)
-            my_bid.append(intramarginal_plants[-1], predicted_cp+2)
+            for plant in intramarginal_plants[:-1]:
+                my_bid.append([plant, plant.price_per_kwh])
+            my_bid.append([intramarginal_plants[-1], predicted_cp+2])
             for plant in extramarginal_plants:
-                my_bid.append(plant, plant.price_per_kwh)
+                my_bid.append([plant, plant.price_per_kwh])
         else:
             for plant in self.power_plants:
                 #bids marginal price for each of my plants 
@@ -92,5 +92,6 @@ class Julia(Competative):
         self.past_agressions += [update/(self.past_ccps[-1])]
 
     def predict_clearing_price(self, ccp):
+        avg = lambda l: sum(l) / len(l)
         #predicts clearing price based on average of past market agressiveness
         return ccp * avg(self.past_agressions)
