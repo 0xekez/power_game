@@ -1,13 +1,13 @@
 from player import Player
 from power_plant import plant_groups
 
-# Tries to make a 25% profit on each sale.
-class Julia(Player):
-    def __init__(self):
+# Bets the competative clearing price for all plants.
+class Competative(Player):
+    def __init__(self, name='competative'):
         # Initialize a player class with the name bob. This will
         # handle creating a bank account and getting all of our
         # variables in order.
-        super().__init__("julia")
+        super().__init__(name)
         self.past_clearing_prices = []
         self.past_ccps = []
         self.past_demands = []
@@ -15,13 +15,16 @@ class Julia(Player):
     def bid(self, demand):
         my_bid = []
         ccp = self.competative_clearing_price(demand)
-        #records ccp and demand for this hour
-        self.past_ccps += [ccp]
-        self.past_demands += [demand]
         for plant in self.power_plants:
             #bids competative clearing price for each of my plants
             my_bid.append([plant, ccp])
+        self.record_demand_and_ccp(demand, ccp)
         return my_bid
+
+    def record_demand_and_ccp(self, demand, ccp):
+        #records ccp and demand for this hour
+        self.past_ccps += [ccp]
+        self.past_demands += [demand]
 
     def receive_update(self, update):
         #records clearing price for this hour
@@ -49,3 +52,45 @@ class Julia(Player):
                 ccp = lowest_bid
                 demand_left = 0
         return ccp
+
+class Julia(Competative):
+    def __init__(self):
+        super().__init__("julia")
+        self.past_agressions = []
+
+    def bid(self, demand):
+        my_bid = []
+        ccp = self.competative_clearing_price(demand)
+        predicted_cp = ccp
+        if self.past_agressions:
+            predicted_cp = ccp * avg(self.past_agressions)
+        sorted_plants = sorted(self.power_plants, key=lambda plant: plant.price_per_kwh)
+        intramarginal_plants, extramarginal_plants = [], []
+        for plant in sorted_plants:
+            if plant.price_per_kwh < predicted_cp:
+                intramarginal_plants.append(plant)
+            else:
+                extramarginal_plants.append(plant)
+        if len(intramarginal_plants)>2:
+            #if we have enough intramarginal plants to have some stability
+            #then we price one a little higher than predicted cp.
+            for plant in intramarginal_plants[-1]:
+                my_bid.append(plant, plant.price_per_kwh)
+            my_bid.append(intramarginal_plants[-1], predicted_cp+2)
+            for plant in extramarginal_plants:
+                my_bid.append(plant, plant.price_per_kwh)
+        else:
+            for plant in self.power_plants:
+                #bids marginal price for each of my plants 
+                my_bid.append([plant, plant.price_per_kwh])
+        self.record_demand_and_ccp(demand, ccp)
+        return my_bid
+
+    def receive_update(self, update):
+        #records clearing price and adds an agressiveness score for this hour
+        self.past_clearing_prices += [update]
+        self.past_agressions += [update/(self.past_ccps[-1])]
+
+    def predict_clearing_price(self, ccp):
+        #predicts clearing price based on average of past market agressiveness
+        return ccp * avg(self.past_agressions)
