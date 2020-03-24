@@ -10,8 +10,9 @@ from averager import Averager
 from constant import Constant
 from julia import Competative
 from zeke import Zeke
+from julia import Julia
 
-players = [Constant(), Laster(), Averager(), Competative(), Zeke()]
+players = [Constant(), Laster(), Averager(), Competative(), Zeke(), Julia()]
 
 # Calculates the clearing price from a set of bids. Bids are in the
 # form (power_plant, bidded_price). Demand is the amount of power that
