@@ -1,8 +1,8 @@
 from player import Player
 from power_plant import plant_groups
 
-# Bets the competative clearing price for all plants.
 class Competative(Player):
+    # Bets the competative clearing price for all plants.
     def __init__(self, name='competative'):
         # Initialize a player class with the name bob. This will
         # handle creating a bank account and getting all of our
@@ -54,8 +54,10 @@ class Competative(Player):
         return ccp
 
 class Julia(Competative):
-    def __init__(self):
-        super().__init__("julia")
+    #predicts clearing price based on average agressiveness of the market
+    #bids all plants marginal except sometimes one at predicted cp
+    def __init__(self, name = "julia"):
+        super().__init__(name)
         self.past_agressions = []
 
     def bid(self, demand):
@@ -76,12 +78,12 @@ class Julia(Competative):
             #then we price one a little higher than predicted cp.
             for plant in intramarginal_plants[:-1]:
                 my_bid.append([plant, plant.price_per_kwh])
-            my_bid.append([intramarginal_plants[-1], predicted_cp+2])
+            my_bid.append([intramarginal_plants[-1], predicted_cp])
             for plant in extramarginal_plants:
                 my_bid.append([plant, plant.price_per_kwh])
         else:
             for plant in self.power_plants:
-                #bids marginal price for each of my plants 
+                #bids marginal price for each of my plants
                 my_bid.append([plant, plant.price_per_kwh])
         self.record_demand_and_ccp(demand, ccp)
         return my_bid
@@ -95,3 +97,25 @@ class Julia(Competative):
         avg = lambda l: sum(l) / len(l)
         #predicts clearing price based on average of past market agressiveness
         return ccp * avg(self.past_agressions)
+
+class Julinear(Julia):
+    #the same as Julia, but predicts cp differently
+    def __init__(self):
+        super().__init__("julinear")
+
+    def predict_clearing_price(self, ccp):
+        #predicts cp by creating a line of best fit based on past past_agressions
+        #to predict how agressive the market will be this time
+        if len(self.past_agressions) > 1:
+            slopes = []
+            for i in range(1, len(self.past_agressions)):
+                slopes += (self.past_agressions[i]-self.past_agressions[0])/i
+            avg = lambda l: sum(l)/len(l)
+            avg_slope = avg(slopes)
+            predicted_agro = self.past_agressions[0] + avg_slope*len(self.past_agressions)
+        else:
+            predicted_agro = self.past_agressions[0]
+        #predicts agressiveness with the average rate of change of
+        #past agressiveness'
+        predicted_cp = ccp * predicted_agro
+        return predicted_cp
