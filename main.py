@@ -9,12 +9,13 @@ from player import Player
 from laster import Laster
 from averager import Averager
 from constant import Constant
-from julia import Julia
+from julia import Competative
 from zeke import Zeke
 from regression import Regression
 from alice import Alice
+from julia import Julia
 
-players = [Constant(), Laster(), Averager(), Julia(), Zeke(), Regression(), Alice()]
+players = [Constant(), Laster(), Averager(), Julia(), Zeke(), Regression(), Competative()]
 
 TheGov = Gov(players, plant_groups)
 
