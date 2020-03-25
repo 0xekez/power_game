@@ -27,7 +27,7 @@ class Zeke(Player):
             # the price, while not risking that some of our plants
             # will price too high.
             predicted = self.memory[demand]
-            return [[plant, max(predicted * 0.8, plant.price_per_kwh)]
+            return [[plant, max(predicted * 0.5, plant.price_per_kwh)]
                     for plant in self.power_plants]
 
         # Otherwise, bid every plant at its marginal cost.

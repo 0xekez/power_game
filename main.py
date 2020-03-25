@@ -1,9 +1,6 @@
-import random
-import matplotlib.pyplot as plt
-
 from bank import Bank
 from gov import Gov
-from plotter import MultiGraphPlotter, show_bar, SingleGraphPlotter
+from plotter import MultiGraphPlotter, PlayerStatePlotter
 from power_plant import PowerPlant, plant_groups
 from player import Player
 
@@ -22,14 +19,14 @@ players = [Laster(), Zeke(), Julia(), Julinear(), Constant(), Competative(), Mar
 
 TheGov = Gov(players, plant_groups)
 Plotter = MultiGraphPlotter(window=100)
-MoneyPlotter = SingleGraphPlotter(window=100)
+MoneyPlotter = PlayerStatePlotter(window=100)
 # The number of times to repeat the simulation.
-repeats = 10
+repeats = 50
 # The number of rounds per simulation.
 rounds = 24 * 365
 
 # Rather or not we should plot.
-plot = True
+plot = False
 
 # Set up win counts. A player 'wins' if at the end of a round they
 # have the most money in their bank account.
@@ -46,7 +43,7 @@ for repeat in range(repeats):
         clearing_price, bids = TheGov.simulate_round(demand)
 
         if plot:
-            show_bar(bids, players, clearing_price, demand)
+            MoneyPlotter.show_bar(bids, players, clearing_price, demand)
             Plotter.add_info("demand", demand)
             Plotter.add_info("clearing price", clearing_price)
             Plotter.draw()
