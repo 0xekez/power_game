@@ -17,8 +17,7 @@ class Player:
 
     # Called whenever a new game loop begins.
     def tick(self):
-        for plant in self.power_plants:
-            plant.tick()
+        return None
 
     # Called at the end of every game loop. Update contains
     # information about the end results of a round.

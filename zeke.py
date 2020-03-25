@@ -4,49 +4,40 @@ from player import Player
 from bank import Bank
 from power_plant import plant_groups
 
-# Increase prices until we stop making money.
+# Based on the observation that clearing price seems to be roughly a
+# function of demand, lets try and "memoize" clearing prices for
+# various amounts of demand.
 class Zeke(Player):
     def __init__(self):
         super().__init__("zeke")
-
-        self.last_balance = 0
-        self.balance_deltas = []
-        self.balances = []
-
-        self.cost_modifier = 0.1
-
-        # Compute the total amount of power avaliable on the market.
-        self.supply = sum([
-            sum([plant.capacity for plant in group]) for group in plant_groups])
-
-    def plot(self):
-        plt.figure()
-
-        plt.subplot(211)
-        plt.plot(self.balance_deltas)
-        plt.ylabel("balance deltas")
-
-        plt.subplot(212)
-        plt.plot(self.balances)
-        plt.ylabel("balance over time")
-        plt.show()
-
-    def tick(self):
-        super().tick()
-
-        current_balance = Bank().check_balance("zeke")
-        balance_delta = current_balance - self.last_balance
-
-        if balance_delta > 0:
-            self.cost_modifier *= 2
-        if balance_delta <= 0:
-            self.cost_modifier /= 1.5
-
-        self.balance_deltas.append(balance_delta)
-        self.balances.append(current_balance)
-        self.last_balance = current_balance
+        self.memory = {}
+        self.last_demand = 0
 
     def bid(self, demand):
-        my_bid = [[plant, plant.price_per_kwh*(1+self.cost_modifier)]
-                  for plant in self.power_plants]
-        return my_bid
+        self.last_demand = demand
+        demand = round(demand) % 100
+
+        if demand in self.memory:
+            # If we beleive that we have predicted the clearing price,
+            # then we want to attempt to drive it up, while
+            # positioning as many of our plants below it as
+            # possible. In order to do this, we position all of our
+            # plants who's price is less than the predicted price at
+            # 80% of the predicted price. This way we hope to drive up
+            # the price, while not risking that some of our plants
+            # will price too high.
+            predicted = self.memory[demand]
+            return [[plant, max(predicted * 0.8, plant.price_per_kwh)]
+                    for plant in self.power_plants]
+
+        # Otherwise, bid every plant at its marginal cost.
+        return [[plant, plant.price_per_kwh] for plant in self.power_plants]
+
+    def receive_update(self, clearing_price):
+        demand = round(self.last_demand) % 100
+        if demand in self.memory:
+            # Take the average.
+            self.memory[demand] += clearing_price
+            self.memory[demand] /= 2
+        else:
+            self.memory[demand] = clearing_price
