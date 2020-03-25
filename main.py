@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from bank import Bank
 from gov import Gov
-from plotter import MultiPlotter, show_bar
+from plotter import MultiGraphPlotter, show_bar, SingleGraphPlotter
 from power_plant import PowerPlant, plant_groups
 from player import Player
 
@@ -18,18 +18,18 @@ from julia import Julia
 from marginal import Marginal
 from julia import Julinear
 
-players = [Laster(), Averager(), Julia(), Julinear(), Constant(), Competative(), Marginal()]
+players = [Laster(), Zeke(), Julia(), Julinear(), Constant(), Competative(), Marginal()]
 
 TheGov = Gov(players, plant_groups)
-Plotter = MultiPlotter(window=100)
-
+Plotter = MultiGraphPlotter(window=100)
+MoneyPlotter = SingleGraphPlotter(window=100)
 # The number of times to repeat the simulation.
 repeats = 10
 # The number of rounds per simulation.
 rounds = 24 * 365
 
 # Rather or not we should plot.
-plot = False
+plot = True
 
 # Set up win counts. A player 'wins' if at the end of a round they
 # have the most money in their bank account.
@@ -50,6 +50,12 @@ for repeat in range(repeats):
             Plotter.add_info("demand", demand)
             Plotter.add_info("clearing price", clearing_price)
             Plotter.draw()
+
+            for player in players:
+                bal = Bank().check_balance(player.name)
+                MoneyPlotter.add_info(player.name, bal)
+            MoneyPlotter.draw()
+            
     winner = max(Bank.the_bank, key=Bank.the_bank.get)
     wins[winner] += 1
 
