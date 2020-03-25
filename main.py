@@ -15,8 +15,10 @@ from zeke import Zeke
 from regression import Regression
 from alice import Alice
 from julia import Julia
+from marginal import Marginal
+from julia import Julinear
 
-players = [Constant(), Laster(), Averager(), Julia(), Zeke(), Regression(), Competative()]
+players = [Laster(), Averager(), Julia(), Julinear(), Constant(), Competative(), Marginal()]
 
 TheGov = Gov(players, plant_groups)
 Plotter = MultiPlotter(window=100)
