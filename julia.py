@@ -109,7 +109,7 @@ class Julinear(Julia):
         if len(self.past_agressions) > 1:
             slopes = []
             for i in range(1, len(self.past_agressions)):
-                slopes += (self.past_agressions[i]-self.past_agressions[0])/i
+                slopes += [(self.past_agressions[i]-self.past_agressions[0])/i]
             avg = lambda l: sum(l)/len(l)
             avg_slope = avg(slopes)
             predicted_agro = self.past_agressions[0] + avg_slope*len(self.past_agressions)

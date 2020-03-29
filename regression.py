@@ -26,8 +26,10 @@ class Regression(Player):
 
     def bid(self, demand):
         cp_guess = self.m * (self.update_count + 1) + self.b
-        my_bid = [[plant, max([plant.price_per_kwh, cp_guess])]
-                  for plant in self.power_plants]
+        my_bid = []
+        for plant in self.power_plants[:-1]:
+            my_bid.append([plant, plant.price_per_kwh])
+        my_bid.append([self.power_plants[-1], cp_guess])
 
         return my_bid
 

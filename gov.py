@@ -1,7 +1,6 @@
 """ Class that handles player bids and payments. """
 
 import random
-from functools import reduce
 
 from bank import Bank
 
@@ -35,7 +34,7 @@ class Gov:
     def simulate_round(self, demand):
         """
         Simulates a single round of the simulation. Returns the clearing
-        price for that round.
+        price for that round and the bids for analysis.
         """
         # Inform all of the players and power plants that a round is
         # beginning.
@@ -48,6 +47,7 @@ class Gov:
         bids = []
         for player in self.players:
             bids.extend(player.bid(demand))
+
         # Calculate clearing price.
         clearing_price = Gov.calculate_clearing_price(bids, demand)
         # Generate the power.
@@ -55,7 +55,7 @@ class Gov:
         # Update players on clearing price for this round.
         for player in self.players:
             player.receive_update(clearing_price)
-        return clearing_price
+        return clearing_price, bids
 
     @staticmethod
     def calculate_clearing_price(bids, demand):
