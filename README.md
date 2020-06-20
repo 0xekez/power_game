@@ -1,6 +1,6 @@
 # Power Game
 
-![data readout screenshot](screenshot.jp2)
+![data readout screenshot](screenshot.jpeg)
 
 In 2000 and 2001 California experienced multiple large-scale blackouts
 and skyrocketing energy prices as the result of market manipulation in
